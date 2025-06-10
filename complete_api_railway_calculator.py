@@ -136,7 +136,7 @@ class CompleteAPIRailwayCalculator:
             ("BMKI", "BIHAR", "ECR"),
             
             # Additional mappings for variations
-            ("O NZM", "HAZRAT NIZAMUDDIN", "NR"),
+            ("NZM", "HAZRAT NIZAMUDDIN", "NR"),
             ("MLLDT", "MALDA TOWN", "NFR"),
             
             # Comprehensive station mappings from your list
@@ -512,18 +512,18 @@ class CompleteAPIRailwayCalculator:
         return name
     
     def get_distance_via_api(self, source, destination):
-        """Get distance using Google Maps API only"""
+        """Get distance using Google Maps API ONLY - no fallback methods"""
         
-        # Check cache first
+        # Check cache first (only for Google API results)
         cached = self.get_cached_distance(source, destination)
-        if cached:
+        if cached and 'Google Maps API' in cached['method']:
             return cached['distance'], cached['method']
         
-        # Always use Google API (hardcoded key)
+        # ONLY use Google API - no coordinate-based fallback
         return self.get_google_distance(source, destination)
     
     def get_google_distance(self, source, destination):
-        """Get distance using Google Maps API with hardcoded key"""
+        """Get distance using Google Maps API ONLY - most accurate rail transit distance"""
         # Hardcoded Google API key
         api_key = "AIzaSyB4X9GmjJBnW4iqXQ3Q6uXcFUyy0ZeS8-o"
         
@@ -538,7 +538,7 @@ class CompleteAPIRailwayCalculator:
                 'units': 'metric'
             }
             
-            response = requests.get(url, params=params, timeout=10)
+            response = requests.get(url, params=params, timeout=15)
             self.api_calls_made += 1
             
             if response.status_code == 200:
@@ -553,20 +553,20 @@ class CompleteAPIRailwayCalculator:
                             distance_m = element['distance']['value']
                             distance_km = round(distance_m / 1000)
                             
-                            # Cache the result
+                            # Cache only successful Google API results
                             self.cache_distance(source, destination, distance_km, 'Google Maps API')
                             
                             return distance_km, 'Google Maps API'
                         else:
-                            # No route found - return 0
-                            return 0, 'Google API: No route found'
+                            # Google API found no route - mark as not found
+                            return 0, 'NOT FOUND - Google API: No rail route available'
                 else:
-                    return 0, f'Google API error: {data.get("status", "Unknown")}'
+                    return 0, f'NOT FOUND - Google API Error: {data.get("status", "Unknown")}'
             else:
-                return 0, f'Google API HTTP error: {response.status_code}'
+                return 0, f'NOT FOUND - Google API HTTP Error: {response.status_code}'
                 
         except Exception as e:
-            return 0, f'Google API exception: {str(e)}'
+            return 0, f'NOT FOUND - Google API Exception: {str(e)}'
 
     
     def cache_distance(self, source, destination, distance, method):
@@ -807,7 +807,8 @@ class CompleteAPIRailwayCalculator:
 
 def main():
     st.title("🚂 Complete API Railway Calculator")
-    st.markdown("**Get comprehensive railway station codes and distances using APIs**")
+    st.markdown("**Get the most accurate railway distances using Google Maps API ONLY**")
+    st.info("🎯 **Google API Only Policy:** Results come exclusively from Google Maps rail transit data. If Google can't find a route, it's marked as 'NOT FOUND' - no estimates or fallbacks!")
     
     calculator = CompleteAPIRailwayCalculator()
     
@@ -817,7 +818,8 @@ def main():
         
         st.success("✅ Google Maps API: Configured")
         st.info("🔑 Using hardcoded Google API key")
-        st.info("🚂 Distance calculation: Google Maps only")
+        st.warning("🎯 GOOGLE API ONLY - Most Accurate Results")
+        st.error("🚫 NO Fallback Methods - If Google can't find route, marked as NOT FOUND")
         st.info(f"📊 API calls made: {calculator.api_calls_made}")
         
         st.subheader("RapidAPI (Optional)")
@@ -835,15 +837,18 @@ def main():
         # API Info
         with st.expander("ℹ️ API Information"):
             st.markdown("""
-            **Google Maps API:**
+            **Google Maps API (PRIMARY):**
             - ✅ Pre-configured with hardcoded key
-            - 🎯 Always used for distance calculations
-            - 🚫 No coordinate-based fallback
+            - 🎯 ONLY source for distance calculations
+            - 🚂 Uses rail transit mode for accuracy
+            - 🚫 NO coordinate-based fallback
+            - ❌ If no route found → "NOT FOUND"
             
             **RapidAPI (Optional):**
-            - 🔍 Enhanced station code search
+            - 🔍 Enhanced station code search only
             - 📋 Get your key from [RapidAPI](https://rapidapi.com/)
             - 🆓 Free plans available
+            - ⚠️ Does NOT affect distance calculations
             """)
     
     # Main Content Tabs
