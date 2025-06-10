@@ -259,7 +259,7 @@ class CompleteAPIRailwayCalculator:
             ("ASH", "AISHBAGH", "NER"),
             ("MLPN", "MAHESHMUNDA", "ECR"),
             ("AGC", "AGRA CANTONMENT", "NCR"),
-            ("PNE", "PUNE", "CR"),
+            ("PNE", "PUNE JUNCTION RAILWAY STATION", "CR"),
             ("DGHA", "DIGHA", "SER"),
             ("KYN", "KALYAN JUNCTION", "CR"),
             ("NITR", "NITTUR", "SWR"),
@@ -440,7 +440,7 @@ class CompleteAPIRailwayCalculator:
             ("VG", "VIJAYAWADA", "SCR"),
             ("ASH", "ASHOK NAGAR", "WCR"),
             ("MLPN", "MALLAPUR", "SCR"),
-            ("PNE", "PUNE", "CR"),
+            ("PNE", "PUNE JUNCTION RAILWAY STATION", "CR"),
             ("NITR", "NILOKHERI", "NR"),
             
             # Corrected mappings for better accuracy
@@ -592,42 +592,59 @@ class CompleteAPIRailwayCalculator:
         api_key = "AIzaSyB4X9GmjJBnW4iqXQ3Q6uXcFUyy0ZeS8-o"
         
         try:
-            url = "https://maps.googleapis.com/maps/api/distancematrix/json"
-            params = {
-                'origins': f"{source} railway station, India",
-                'destinations': f"{destination} railway station, India",
-                'mode': 'transit',
-                'transit_mode': 'train',
-                'key': api_key,
-                'units': 'metric'
-            }
+            # Try multiple query formats for better success rate
+            query_formats = [
+                f"{source} railway station, India",
+                f"{source} railway station",
+                f"{source} station, India",
+                f"{source}, India"
+            ]
             
-            response = requests.get(url, params=params, timeout=15)
-            self.api_calls_made += 1
-            
-            if response.status_code == 200:
-                data = response.json()
+            for i, origin_format in enumerate(query_formats):
+                destination_format = query_formats[i].replace(source, destination)
                 
-                if data.get('status') == 'OK':
-                    rows = data.get('rows', [])
-                    if rows and rows[0].get('elements'):
-                        element = rows[0]['elements'][0]
-                        
-                        if element.get('status') == 'OK':
-                            distance_m = element['distance']['value']
-                            distance_km = round(distance_m / 1000)
+                url = "https://maps.googleapis.com/maps/api/distancematrix/json"
+                params = {
+                    'origins': origin_format,
+                    'destinations': destination_format,
+                    'mode': 'transit',
+                    'transit_mode': 'train',
+                    'key': api_key,
+                    'units': 'metric'
+                }
+                
+                response = requests.get(url, params=params, timeout=15)
+                self.api_calls_made += 1
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    
+                    if data.get('status') == 'OK':
+                        rows = data.get('rows', [])
+                        if rows and rows[0].get('elements'):
+                            element = rows[0]['elements'][0]
                             
-                            # Cache only successful Google API results
-                            self.cache_distance(source, destination, distance_km, 'Google Maps API')
-                            
-                            return distance_km, 'Google Maps API'
-                        else:
-                            # Google API found no route - mark as not found
-                            return 0, 'NOT FOUND - Google API: No rail route available'
+                            if element.get('status') == 'OK':
+                                distance_m = element['distance']['value']
+                                distance_km = round(distance_m / 1000)
+                                
+                                # Cache successful result with query format info
+                                method = f'Google Maps API (format: {i+1})'
+                                self.cache_distance(source, destination, distance_km, method)
+                                
+                                return distance_km, method
+                            elif element.get('status') == 'ZERO_RESULTS':
+                                # Continue to next format
+                                continue
+                            else:
+                                # Other error, continue to next format
+                                continue
                 else:
-                    return 0, f'NOT FOUND - Google API Error: {data.get("status", "Unknown")}'
-            else:
-                return 0, f'NOT FOUND - Google API HTTP Error: {response.status_code}'
+                    # HTTP error, continue to next format
+                    continue
+            
+            # All formats failed
+            return 0, f'NOT FOUND - Google API: No rail route found for {source} to {destination} (tried 4 formats)'
                 
         except Exception as e:
             return 0, f'NOT FOUND - Google API Exception: {str(e)}'
@@ -916,7 +933,7 @@ def main():
             """)
     
     # Main Content Tabs
-    tab1, tab2, tab3 = st.tabs(["📄 File Processing", "🔍 Station Search", "🧮 Distance Calculator"])
+    tab1, tab2, tab3, tab4 = st.tabs(["📄 File Processing", "🔍 Station Search", "🧮 Distance Calculator", "🧪 Route Tester"])
     
     with tab1:
         st.subheader("Upload and Process File")
@@ -1118,6 +1135,99 @@ def main():
                             st.warning("⚠️ Please enter at least 2 stations for a journey")
                 else:
                     st.warning("⚠️ Please enter a journey route")
+    
+    with tab4:
+        st.subheader("🧪 Route Tester - Debug Google API Issues")
+        st.info("Test problematic routes to see exactly what Google API returns")
+        
+        # Predefined problematic routes
+        problematic_routes = [
+            "BBS-HTE", "NJP-SDAH", "GHY-DBRG", "NBQ-GHY", "DBRG-GHY",
+            "RNC-BKSC", "JMU-SGR", "SGR-JMU", "SDAH-NJP", "BZA-KUR",
+            "NDLS-ST", "MMCT-JAM", "KQG-CAN", "SCL-AGTL", "TATA-WH"
+        ]
+        
+        # Route selection
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            test_route = st.selectbox(
+                "Select a problematic route to test:",
+                problematic_routes,
+                help="These are routes that typically fail with Google API"
+            )
+        
+        with col2:
+            if st.button("🔍 Test This Route", type="primary"):
+                if test_route:
+                    source, destination = test_route.split('-')
+                    
+                    with st.spinner(f"Testing {source} to {destination} with Google API..."):
+                        # Resolve station codes
+                        resolved_source = calculator.find_station_by_name(source)
+                        resolved_dest = calculator.find_station_by_name(destination)
+                        
+                        st.write(f"**Route:** {source} → {destination}")
+                        st.write(f"**Resolved:** {resolved_source} → {resolved_dest}")
+                        
+                        # Test the route
+                        distance, method = calculator.calculate_distance(resolved_source, resolved_dest)
+                        
+                        if distance > 0:
+                            st.success(f"✅ **SUCCESS!** Distance: {distance} km")
+                            st.info(f"📊 Method: {method}")
+                        else:
+                            st.error(f"❌ **FAILED:** {method}")
+                            st.warning("💡 This route is not available in Google's transit database")
+        
+        # Bulk test option
+        st.subheader("🚀 Bulk Test Problematic Routes")
+        if st.button("🧪 Test All Problematic Routes", type="secondary"):
+            results = []
+            progress = st.progress(0)
+            status = st.empty()
+            
+            for i, route in enumerate(problematic_routes):
+                progress.progress((i + 1) / len(problematic_routes))
+                status.text(f"Testing {i+1}/{len(problematic_routes)}: {route}")
+                
+                source, destination = route.split('-')
+                resolved_source = calculator.find_station_by_name(source)
+                resolved_dest = calculator.find_station_by_name(destination)
+                
+                distance, method = calculator.calculate_distance(resolved_source, resolved_dest)
+                
+                results.append({
+                    'Route': route,
+                    'Source': resolved_source,
+                    'Destination': resolved_dest,
+                    'Distance': distance,
+                    'Status': 'SUCCESS' if distance > 0 else 'FAILED',
+                    'Method': method
+                })
+                
+                # Small delay to avoid rate limiting
+                time.sleep(0.2)
+            
+            progress.empty()
+            status.empty()
+            
+            # Show results
+            results_df = pd.DataFrame(results)
+            st.dataframe(results_df, use_container_width=True)
+            
+            # Statistics
+            success_count = len(results_df[results_df['Status'] == 'SUCCESS'])
+            total_count = len(results_df)
+            success_rate = (success_count / total_count * 100) if total_count > 0 else 0
+            
+            col_a, col_b, col_c = st.columns(3)
+            with col_a:
+                st.metric("Total Routes", total_count)
+            with col_b:
+                st.metric("Successful", success_count)
+            with col_c:
+                st.metric("Success Rate", f"{success_rate:.1f}%")
 
 if __name__ == "__main__":
     main() 
