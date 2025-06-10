@@ -18,7 +18,7 @@ class CompleteAPIRailwayCalculator:
         self.cache_db = "railway_cache.db"
         self.init_cache_db()
         self.init_default_stations()
-        
+    
     def init_cache_db(self):
         """Initialize SQLite cache database"""
         conn = sqlite3.connect(self.cache_db)
@@ -48,25 +48,342 @@ class CompleteAPIRailwayCalculator:
         conn.close()
     
     def init_default_stations(self):
-        """Initialize with common station codes"""
+        """Initialize with comprehensive station codes"""
         default_stations = [
+            # Major Cities (Original)
             ("SBC", "BANGALORE CITY", "SW"),
             ("BCT", "MUMBAI CENTRAL", "WR"),
             ("NDLS", "NEW DELHI", "NR"),
             ("MAS", "CHENNAI CENTRAL", "SR"),
             ("HWH", "HOWRAH", "ER"),
             ("SC", "SECUNDERABAD", "SC"),
-            ("PUNE", "PUNE", "CR"),
-            ("PN", "PUNE", "CR"),  # Common abbreviation
+            ("PUNE", "PUNE JUNCTION RAILWAY STATION", "CR"),
+            ("PN", "PUNE", "CR"),
             ("AMD", "AHMEDABAD", "WR"),
             ("JP", "JAIPUR", "NW"),
             ("LKO", "LUCKNOW", "NR"),
-            ("BLR", "BANGALORE CITY", "SW"),  # Common abbreviation
-            ("DEL", "NEW DELHI", "NR"),  # Common abbreviation
-            ("MUM", "MUMBAI CENTRAL", "WR"),  # Common abbreviation
-            ("CHN", "CHENNAI CENTRAL", "SR"),  # Common abbreviation
-            ("HYD", "SECUNDERABAD", "SC"),  # Common abbreviation
-            ("KOL", "HOWRAH", "ER")  # Common abbreviation
+            ("BLR", "BANGALORE CITY", "SW"),
+            ("DEL", "NEW DELHI", "NR"),
+            ("MUM", "MUMBAI CENTRAL", "WR"),
+            ("CHN", "CHENNAI CENTRAL", "SR"),
+            ("HYD", "SECUNDERABAD", "SC"),
+            ("KOL", "HOWRAH", "ER"),
+            
+            # Comprehensive Station Mappings
+            ("HYB", "HYDERABAD DECCAN RAILWAY STATION", "SC"),
+            ("SCL", "SILCHAR", "NFR"),
+            ("DMV", "DIMAPUR RAILWAY STATION", "NFR"),
+            ("NBQ", "NEW BONGAIGAON JUNCTION", "NFR"),
+            ("CNGR", "CHENGANNUR", "SR"),
+            ("OGL", "ONGOLE", "SCR"),
+            ("SGNR", "SHRI GANGA NAGAR CHORAHA", "NWR"),
+            ("BTI", "BATHINDA JUNCTION", "NR"),
+            ("KOJ", "KOKRAJHAR", "NFR"),
+            ("SGAC", "SOGARIA (KOTA)", "WCR"),
+            ("JJKR", "JAJPUR KEONJHAR ROAD", "ECoR"),
+            ("DEE", "DELHI SARAI ROHILLA", "NR"),
+            ("MAJN", "MANGALORE JUNCTION", "KR"),
+            ("BKSC", "BOKARO STEEL CITY", "ECR"),
+            ("NOQ", "NEW ALIPURDUAR", "NFR"),
+            ("VSKC", "VISAKHAPATNAM RAILWAY STATION", "ECoR"),
+            ("ROU", "ROURKELA JUNCTION", "ECoR"),
+            ("DEC", "DELHI CANTONMENT", "NR"),
+            ("NLS", "NELLORE SOUTH RAILWAY STATION", "SCR"),
+            ("KLBG", "KALABURAGI", "SWR"),
+            ("JMU", "JAMUI", "ECR"),
+            ("RKMP", "HABIBGANJ RAILWAY STATION", "WCR"),
+            ("SGR", "SANGAMESHWAR RAILWAY STATION", "KR"),
+            ("SRR", "SHORANUR JUNCTION", "SR"),
+            ("ALLP", "ALAPPUZHA (ALLEPPEY)", "SR"),
+            ("KCVL", "THIRUVANANTHAPURAM NORTH (KOCHUVELI)", "SR"),
+            ("MANLI", "JOGINDER NAGAR", "NR"),
+            ("PRNC", "PURNIA COURT", "NFR"),
+            ("KGQ", "KASARAGOD RAILWAY STATION", "SR"),
+            ("MMCT", "MUMBAI CENTRAL", "WR"),
+            ("KQG", "KOLAGALLU RAILWAY STATION", "SCR"),
+            ("MLDT", "MALDA TOWN RAILWAY STATION", "NFR"),
+            ("BRPD", "BARPETA ROAD", "NFR"),
+            ("LJN", "LUCKNOW JUNCTION", "NER"),
+            ("RJBP", "RAJENDRANAGAR TERMINAL", "ECR"),
+            ("LTT", "LOKMANYA TILAK TERMINUS RAILWAY STATION", "CR"),
+            ("SBP", "SAMBALPUR JUNCTION", "ECoR"),
+            ("MZS", "MURKONGSELEK", "NFR"),
+            ("SRTL", "CHERTHALA (SHERTHALAI) RAILWAY STATION", "SR"),
+            ("AGTL", "AGARTALA RAILWAY STATION", "NFR"),
+            ("AGRL", "AGRA CANTT", "NCR"),
+            ("SMVB", "SATYAMANGALA", "SR"),
+            ("LLT", "LALITPUR", "NCR"),
+            ("AADR", "AADRASH NAGAR", "WR"),
+            ("LPI", "LIPI", "ER"),
+            ("KUN", "KUNDAPURA", "KR"),
+            ("GHHY", "GUNDICHAPURAM", "SR"),
+            ("BKMI", "BANKIM NAGAR", "ER"),
+            ("ADI", "AHMEDABAD", "WR"),
+            ("NKP", "NARKATIAGANJ", "NER"),
+            ("RPJ", "RAJPURA", "NR"),
+            ("HTE", "HATIA", "SER"),
+            ("GGN", "GURGAON", "NR"),
+            ("TDL", "TINDHARIA", "NFR"),
+            ("PER", "PERUNGUDI", "SR"),
+            ("NHLN", "NAHLAIN", "WR"),
+            ("THE", "THEOG", "NR"),
+            ("NCB", "NADIAD", "WR"),
+            ("NSTK", "NSTK", "NFR"),
+            ("GGVT", "GAYA JUNCTION", "ECR"),
+            ("KOAA", "KOLKATA", "ER"),
+            ("WH", "WADI", "SCR"),
+            ("QLN", "QUILON", "SR"),
+            ("BMKI", "BIHAR", "ECR"),
+            
+            # Additional mappings for variations
+            ("O NZM", "HAZRAT NIZAMUDDIN", "NR"),
+            ("MLLDT", "MALDA TOWN", "NFR"),
+            
+            # Comprehensive station mappings from your list
+            ("ASR", "AMRITSAR JUNCTION", "NR"),
+            ("CDG", "CHANDIGARH", "NR"),
+            ("BBS", "BHUBANESWAR", "ECoR"),
+            ("NDLS", "NEW DELHI", "NR"),
+            ("PNBE", "PATNA JUNCTION", "ECR"),
+            ("UDZ", "UDAIPUR CITY", "NWR"),
+            ("NJP", "NEW JALPAIGURI", "NFR"),
+            ("BZA", "VIJAYAWADA JUNCTION", "SCR"),
+            ("MAO", "MADGAON", "KR"),
+            ("GHY", "GUWAHATI", "NFR"),
+            ("HWH", "HOWRAH JUNCTION", "ER"),
+            ("VSKP", "VISAKHAPATNAM", "ECoR"),
+            ("NLR", "NELLORE", "SCR"),
+            ("R", "RAIPUR JUNCTION", "SECR"),
+            ("DBRG", "DIBRUGARH TOWN", "NFR"),
+            ("RNC", "RANCHI", "SER"),
+            ("GGN", "GURUGRAM", "NR"),
+            ("SBC", "BANGALORE CITY", "SWR"),
+            ("SC", "SECUNDERABAD JUNCTION", "SCR"),
+            ("GNT", "GUNTUR JUNCTION", "SCR"),
+            ("MAS", "CHENNAI CENTRAL", "SR"),
+            ("JRC", "JALANDHAR CITY", "NR"),
+            ("JU", "JODHPUR JUNCTION", "NWR"),
+            ("GWL", "GWALIOR", "NCR"),
+            ("TNA", "THANE", "CR"),
+            ("CAN", "KANNUR", "SR"),
+            ("ERN", "ERNAKULAM JUNCTION", "SR"),
+            ("JBP", "JABALPUR", "WCR"),
+            ("SDAH", "SEALDAH", "ER"),
+            ("KUR", "KHURDA ROAD JUNCTION", "ECoR"),
+            ("ERS", "ERNAKULAM TOWN", "SR"),
+            ("NZM", "HAZRAT NIZAMUDDIN", "NR"),
+            ("CSMT", "MUMBAI CST", "CR"),
+            ("DHN", "DHANBAD JUNCTION", "ECR"),
+            ("YPR", "YESVANTPUR JUNCTION", "SWR"),
+            ("PUNE", "PUNE JUNCTION", "CR"),
+            ("BAM", "BRAHMAPUR", "ECoR"),
+            ("JAB", "YAMUNA BRIDGE AGRA", "NCR"),
+            ("JAM", "JAMNAGAR", "WR"),
+            ("RJY", "RAJAHMUNDRY", "ECoR"),
+            ("PGT", "PURULIA JUNCTION", "SER"),
+            ("BSB", "VARANASI JUNCTION", "NER"),
+            ("TATA", "TATANAGAR JUNCTION", "SER"),
+            ("BGP", "BHAGALPUR", "ECR"),
+            ("CNB", "KANPUR CENTRAL", "NCR"),
+            ("GKP", "GORAKHPUR JUNCTION", "NER"),
+            ("ST", "SURAT", "WR"),
+            ("KTYM", "KOTTAYAM", "SR"),
+            ("MAQ", "MANGALORE CENTRAL", "KR"),
+            ("CLT", "KOLLAM JUNCTION", "SR"),
+            ("TVC", "TRIVANDRUM CENTRAL", "SR"),
+            ("DDN", "DEHRADUN", "NR"),
+            ("JAT", "JAMMU TAWI", "NR"),
+            ("INDB", "INDORE JUNCTION", "WCR"),
+            ("BKMI", "BIKANER JUNCTION", "NWR"),
+            ("NKP", "NARKATIAGANJ JUNCTION", "NER"),
+            ("HW", "HARIDWAR JUNCTION", "NR"),
+            ("SCB", "SAMBALPUR", "ECoR"),
+            ("ET", "ITARSI JUNCTION", "WCR"),
+            ("DBRT", "DIBRUGARH TOWN", "NFR"),
+            ("DPJ", "DARJEELING", "NFR"),
+            ("VSG", "VASCO DA GAMA", "KR"),
+            ("HX", "HASSAN JUNCTION", "SWR"),
+            ("Vapi", "VAPI", "WR"),
+            ("HADS", "HATHRAS CITY", "NCR"),
+            ("YNK", "YAMUNANAGAR", "NR"),
+            ("KYTM", "KOTTAYAM", "SR"),
+            ("KCG", "HYDERABAD KACHEGUDA", "SCR"),
+            ("JSG", "JHARSUGUDA JUNCTION", "ECoR"),
+            ("SHM", "SHALIMAR", "ER"),
+            ("DWX", "DEWAS JUNCTION", "WCR"),
+            ("SPJ", "SITAPUR JUNCTION", "NER"),
+            ("CWA", "CHHIWARA", "WCR"),
+            ("NSK", "NASHIK ROAD", "CR"),
+            ("CTP", "CUTTACK", "ECoR"),
+            ("JDB", "JAGADABANDHAN", "ER"),
+            ("ATP", "ANANTAPUR", "SCR"),
+            ("MTJ", "MATHURA JUNCTION", "NCR"),
+            ("USL", "USLAPUR", "SCR"),
+            ("LDH", "LUDHIANA JUNCTION", "NR"),
+            ("BGM", "BELAGAVI", "SWR"),
+            ("PRYJ", "PRAYAGRAJ JUNCTION", "NCR"),
+            ("UD", "UDHAMPUR", "NR"),
+            ("TIR", "TIRUPUR", "SR"),
+            ("TCR", "THRISSUR", "SR"),
+            ("CTC", "CUTTACK", "ECoR"),
+            ("BPL", "BHOPAL JUNCTION", "WCR"),
+            ("UBL", "HUBLI JUNCTION", "SWR"),
+            ("BLS", "BALASORE", "ECoR"),
+            ("PURI", "PURI", "ECoR"),
+            ("BSP", "BILASPUR JUNCTION", "SECR"),
+            ("AII", "AJMER JUNCTION", "NWR"),
+            ("MRJ", "MIRAJ JUNCTION", "CR"),
+            ("UHL", "UNHA", "NR"),
+            ("UMB", "AMBALA CANTONMENT", "NR"),
+            ("PRR", "PURULIA JUNCTION", "SER"),
+            ("PGW", "PHAGWARA JUNCTION", "NR"),
+            ("KOTA", "KOTA JUNCTION", "WCR"),
+            ("MLDT", "MALDA TOWN", "NFR"),
+            ("HTE", "HATIA", "SER"),
+            ("MTM", "MACHILIPATNAM", "SCR"),
+            ("HYD", "HYDERABAD DECCAN", "SCR"),
+            ("BE", "BHARUCH JUNCTION", "WR"),
+            ("ABR", "ABU ROAD", "NWR"),
+            ("LKR", "LUCKNOW", "NR"),
+            ("MANALI", "MANALI", "NR"),
+            ("PPTA", "PATLIPUTRA JUNCTION", "ECR"),
+            ("NTSK", "NEW TINSUKIA JUNCTION", "NFR"),
+            ("BPC", "BERHAMPORE COURT", "ER"),
+            ("BVI", "BORIVALI", "WR"),
+            ("AWT", "ALWAR JUNCTION", "NWR"),
+            ("BRC", "VADODARA JUNCTION", "WR"),
+            ("RPAN", "RANGAPAN", "NFR"),
+            ("VG", "VIRAMGAM JUNCTION", "WR"),
+            ("BSR", "VASAI ROAD", "WR"),
+            ("KAWR", "KARWAR", "KR"),
+            ("ASH", "AISHBAGH", "NER"),
+            ("MLPN", "MAHESHMUNDA", "ECR"),
+            ("AGC", "AGRA CANTONMENT", "NCR"),
+            ("PNE", "PUNE", "CR"),
+            ("DGHA", "DIGHA", "SER"),
+            ("KYN", "KALYAN JUNCTION", "CR"),
+            ("NITR", "NITTUR", "SWR"),
+            ("CKP", "CHAKRADHARPUR", "SER"),
+            ("KLK", "KALKA", "NR"),
+            ("NNDLS", "NEW DELHI", "NR"),
+            ("MYS", "MYSORE JUNCTION", "SWR"),
+            ("GZB", "GHAZIABAD", "NR"),
+            ("MB", "MORADABAD JUNCTION", "NR"),
+            ("NK", "NASIK ROAD", "CR"),
+            ("MMR", "MANMAD JUNCTION", "CR"),
+            ("AY", "AYODHYA JUNCTION", "NR"),
+            ("AYC", "AYODHYA CANTT", "NR"),
+            ("GBZ", "GHAZIABAD", "NR"),
+            ("NE", "NERAL", "CR"),
+            ("TPT", "TIRUPATI", "SCR"),
+            ("Kurnool", "KURNOOL CITY", "SCR"),
+            ("CNAN", "CHENGANNUR", "SR"),
+            ("RTDL", "RATANGARH", "NWR"),
+            ("CPK", "CHAPRA JUNCTION", "ECR"),
+            ("JSGR", "JHARSUGUDA", "ECoR"),
+            ("VLI", "VELLORE CANTONMENT", "SR"),
+            ("DDU", "PANDIT DEEN DAYAL UPADHYAYA JUNCTION", "NCR"),
+            ("DURG", "DURG JUNCTION", "SECR"),
+            ("KYQ", "KAMAKHYA JUNCTION", "NFR"),
+            ("BJP", "BIJAPUR", "SWR"),
+            ("BAY", "BALLARI JUNCTION", "SWR"),
+            ("MBNR", "MAHBUBNAGAR", "SCR"),
+            ("KYJ", "KAYAMKULAM JUNCTION", "SR"),
+            ("KZJ", "KAZIPET JUNCTION", "SCR"),
+            ("PNVL", "PANVEL JUNCTION", "CR"),
+            ("JUC", "JALANDHAR CANTONMENT", "NR"),
+            ("BvRM", "BHAVNAGAR TERMINUS", "WR"),
+            ("FK", "FARIDKOT", "NR"),
+            ("NZB", "NIZAMABAD JUNCTION", "SCR"),
+            ("BPB", "BADARPUR JUNCTION", "NFR"),
+            ("NDLLS", "NEW DELHI", "NR"),
+            ("BGS", "BEGU SARAI", "ECR"),
+            ("HAD", "HALDWANI", "NR"),
+            ("MCA", "MACHILIPATNAM", "SCR"),
+            ("KDR", "KANDHAR", "WCR"),
+            ("KGP", "KHARAGPUR JUNCTION", "SER"),
+            ("KIR", "KATIHAR JUNCTION", "NFR"),
+            ("NMZ", "NEW MIRZAPUR", "NCR"),
+            ("GAYA", "GAYA JUNCTION", "ECR"),
+            ("AJ", "AJGAIN", "NR"),
+            ("TRC", "THIRUVARUR JUNCTION", "SR"),
+            ("JSME", "JASIDIH JUNCTION", "ECR"),
+            ("JYP", "JEYPORE", "ECoR"),
+            ("BKN", "BIKANER JUNCTION", "NWR"),
+            ("HHW", "HARIDWAR JUNCTION", "NR"),
+            ("KOP", "KOLHAPUR CSMT", "CR"),
+            ("SMET", "SRIKAKULAM ROAD", "ECoR"),
+            ("HAS", "HASSAN JUNCTION", "SWR"),
+            ("AWB", "AURANGABAD", "CR"),
+            ("NDL", "NANDYAL JUNCTION", "SCR"),
+            ("TVCN", "TIRUVOTTIYUR", "SR"),
+            ("JHS", "JHANSI JUNCTION", "NCR"),
+            ("PTKC", "PATHANKOT CANTONMENT", "NR"),
+            ("TBM", "TAMBARAM", "SR"),
+            ("KXCG", "KACHEGUDA", "SCR"),
+            ("SV", "SIWAN JUNCTION", "ECR"),
+            ("DDR", "DAUND JUNCTION", "CR"),
+            ("TPTY", "TIRUPTI", "SCR"),
+            ("PRNA", "PURNEA JUNCTION", "NFR"),
+            ("DR", "DADAR", "CR"),
+            ("SUR", "SOLAPUR JUNCTION", "CR"),
+            ("BLJK", "BHALUKJUNG", "NFR"),
+            ("DHM", "DHAMARA GHAT", "ER"),
+            ("SLO", "SAMALKOT JUNCTION", "ECoR"),
+            ("MLDYT", "MALDA TOWN", "NFR"),
+            ("MCI", "MANCHERIAL", "SCR"),
+            
+            # Common variations
+            ("KOCHI", "ERNAKULAM", "SR"),
+            ("JAMMU", "JAMMU TAWI", "NR"),
+            ("KOLKATA", "HOWRAH", "ER"),
+            ("CHANDIGARH", "CHANDIGARH", "NR"),
+            ("SINGRAULI", "SINGRAULI", "ECR"),
+            ("SHOLAVANDAN", "SHOLAVANDAN", "SR"),
+            ("SRIGANGANAGAR", "SHRI GANGA NAGAR", "NWR"),
+            ("BHATINDA", "BATHINDA JUNCTION", "NR"),
+            ("MAJHERHAT", "MAJHERHAT", "ER"),
+            ("MANALI", "MANALI", "NR"),
+            ("ANGUL", "ANGUL", "ECoR"),
+            ("BIHAR SHARIF", "BIHAR SHARIF", "ECR"),
+            ("SABARMATI", "SABARMATI", "WR"),
+            ("SURTANJI", "SURTANJI", "NFR"),
+            ("DUMKA", "DUMKA", "ECR"),
+            ("OLD NIZAMUDDIN", "HAZRAT NIZAMUDDIN", "NR"),
+            ("Bhuntar", "BHUNTAR", "NR"),
+            ("Goa", "MADGAON", "KR"),
+            ("MLDR", "MALADHAR", "WR"),
+            ("KRNT", "KURNOOL CITY", "SCR"),
+            ("STA", "SATNA", "WCR"),
+            ("KGI", "KALGACCHI", "ER"),
+            ("LMG", "LAMJUNG", "NFR"),
+            ("ANGL", "ANGUL", "ECoR"),
+            ("KTU", "KOTTURU", "SR"),
+            ("HZBN", "HUZURABAD", "SCR"),
+            ("VGLJ", "VAIGAI", "SR"),
+            ("KAWRA", "KARWAR", "KR"),
+            ("SRE", "SAHARANPUR JUNCTION", "NR"),
+            ("EE", "ELURU", "SCR"),
+            ("KARWAR", "KARWAR", "KR"),
+            ("HPT", "HOSAPETE JUNCTION", "SWR"),
+            ("WL", "WARANGAL", "SCR"),
+            ("NZZM", "HAZRAT NIZAMUDDIN", "NR"),
+            ("KRWA", "KIRWALI", "NR"),
+            ("MAY", "MAYILADUTHURAI JUNCTION", "SR"),
+            ("CPT", "TIRUCHCHIRAPPALLI JUNCTION", "SR"),
+            ("DRU", "KADUR JUNCTION", "SWR"),
+            ("SDMV", "SIDHPUR", "WR"),
+            ("LTTT", "LOKMANYA TILAK TERMINUS", "CR"),
+            ("SINI", "SINI JUNCTION", "SER"),
+            ("SRTYL", "SERTOLI", "KR"),
+            ("UJN", "UJJAIN JUNCTION", "WCR"),
+            ("BDTS", "BANDRA TERMINUS", "WR"),
+            ("gGKP", "GORAKHPUR JUNCTION", "NER"),
+            ("BWN", "BARDWAN JUNCTION", "ER"),
+            ("HUBL", "HUBLI JUNCTION", "SWR"),
+            ("BHP", "BERHAMPORE COURT", "ER"),
+            ("KBLG", "KALABURAGI", "SWR"),
+            ("RJPB", "RAJENDRA NAGAR", "ECR")
         ]
         
         conn = sqlite3.connect(self.cache_db)
@@ -119,9 +436,9 @@ class CompleteAPIRailwayCalculator:
                 
                 if isinstance(data, dict) and 'stations' in data:
                     for station in data['stations']:
-                        stations.append({
-                            'code': station.get('station_code', ''),
-                            'name': station.get('station_name', ''),
+                            stations.append({
+                                'code': station.get('station_code', ''),
+                                'name': station.get('station_name', ''),
                             'zone': ''
                         })
                 
@@ -194,24 +511,21 @@ class CompleteAPIRailwayCalculator:
         # Return original if no match found
         return name
     
-    def get_distance_via_api(self, source, destination, api_method='google'):
-        """Get distance using various APIs"""
+    def get_distance_via_api(self, source, destination):
+        """Get distance using Google Maps API only"""
         
         # Check cache first
         cached = self.get_cached_distance(source, destination)
         if cached:
             return cached['distance'], cached['method']
         
-        if api_method == 'google' and st.session_state.get('google_api_key'):
-            return self.get_google_distance(source, destination)
-        else:
-            return self.estimate_distance_by_coordinates(source, destination)
+        # Always use Google API (hardcoded key)
+        return self.get_google_distance(source, destination)
     
     def get_google_distance(self, source, destination):
-        """Get distance using Google Maps API"""
-        api_key = st.session_state.get('google_api_key', '')
-        if not api_key:
-            return None, "No Google API key"
+        """Get distance using Google Maps API with hardcoded key"""
+        # Hardcoded Google API key
+        api_key = "AIzaSyB4X9GmjJBnW4iqXQ3Q6uXcFUyy0ZeS8-o"
         
         try:
             url = "https://maps.googleapis.com/maps/api/distancematrix/json"
@@ -219,7 +533,7 @@ class CompleteAPIRailwayCalculator:
                 'origins': f"{source} railway station, India",
                 'destinations': f"{destination} railway station, India",
                 'mode': 'transit',
-                'transit_mode': 'rail',
+                'transit_mode': 'train',
                 'key': api_key,
                 'units': 'metric'
             }
@@ -244,219 +558,16 @@ class CompleteAPIRailwayCalculator:
                             
                             return distance_km, 'Google Maps API'
                         else:
-                            # Fallback to estimation if no route found
-                            return self.estimate_distance_by_coordinates(source, destination)
+                            # No route found - return 0
+                            return 0, 'Google API: No route found'
                 else:
-                    return self.estimate_distance_by_coordinates(source, destination)
+                    return 0, f'Google API error: {data.get("status", "Unknown")}'
             else:
-                return self.estimate_distance_by_coordinates(source, destination)
+                return 0, f'Google API HTTP error: {response.status_code}'
                 
         except Exception as e:
-            return self.estimate_distance_by_coordinates(source, destination)
-    
-    def estimate_distance_by_coordinates(self, source, destination):
-        """Estimate distance using haversine formula with coordinates"""
-        coordinates = {
-            # Major Metro Cities
-            'BANGALORE CITY': (12.9716, 77.5946), 'SBC': (12.9716, 77.5946),
-            'MUMBAI CENTRAL': (19.0760, 72.8777), 'BCT': (19.0760, 72.8777),
-            'NEW DELHI': (28.6139, 77.2090), 'NDLS': (28.6139, 77.2090),
-            'CHENNAI CENTRAL': (13.0827, 80.2707), 'MAS': (13.0827, 80.2707),
-            'KOLKATA': (22.5726, 88.3639), 'HOWRAH': (22.5726, 88.3639), 'HWH': (22.5726, 88.3639),
-            'HYDERABAD': (17.3850, 78.4867), 'SECUNDERABAD': (17.3850, 78.4867), 'SC': (17.3850, 78.4867),
-            'PUNE': (18.5204, 73.8567), 'AHMEDABAD': (23.0225, 72.5714), 'AMD': (23.0225, 72.5714),
-            
-            # Delhi NCR
-            'DELHI SARAI ROHILLA': (28.6517, 77.1917), 'DEE': (28.6517, 77.1917),
-            'OLD DELHI': (28.6665, 77.2315), 'DLI': (28.6665, 77.2315),
-            'HAZRAT NIZAMUDDIN': (28.5833, 77.2500), 'NZM': (28.5833, 77.2500),
-            'ANAND VIHAR': (28.6469, 77.3158), 'ANVT': (28.6469, 77.3158),
-            'GHAZIABAD': (28.6692, 77.4538), 'GZB': (28.6692, 77.4538),
-            'FARIDABAD': (28.4089, 77.3178), 'FDB': (28.4089, 77.3178),
-            'GURGAON': (28.4595, 77.0266), 'GGN': (28.4595, 77.0266),
-            
-            # Mumbai Suburban
-            'CHHATRAPATI SHIVAJI MAHARAJ TERMINUS': (18.9398, 72.8355), 'CSMT': (18.9398, 72.8355),
-            'LOKMANYA TILAK TERMINUS': (19.0688, 72.8856), 'LTT': (19.0688, 72.8856),
-            'DADAR': (19.0176, 72.8562), 'DR': (19.0176, 72.8562),
-            'KURLA': (19.0728, 72.8826), 'LNL': (19.0728, 72.8826),
-            'THANE': (19.1972, 72.9581), 'TNA': (19.1972, 72.9581),
-            'KALYAN': (19.2437, 73.1631), 'KYN': (19.2437, 73.1631),
-            'PANVEL': (18.9894, 73.1106), 'PNVL': (18.9894, 73.1106),
-            
-            # Maharashtra
-            'NASHIK ROAD': (19.9975, 73.7898), 'NK': (19.9975, 73.7898),
-            'AURANGABAD': (19.8762, 75.3433), 'AWB': (19.8762, 75.3433),
-            'SOLAPUR': (17.6599, 75.9064), 'SUR': (17.6599, 75.9064),
-            'KOLHAPUR': (16.7050, 74.2433), 'KOP': (16.7050, 74.2433),
-            'NAGPUR': (21.1458, 79.0882), 'NGP': (21.1458, 79.0882),
-            'AMRAVATI': (20.9319, 77.7523), 'AMI': (20.9319, 77.7523),
-            
-            # Gujarat
-            'SURAT': (21.1702, 72.8311), 'ST': (21.1702, 72.8311),
-            'VADODARA': (22.3072, 73.1812), 'BRC': (22.3072, 73.1812),
-            'RAJKOT': (22.3039, 70.8022), 'RJT': (22.3039, 70.8022),
-            'BHAVNAGAR': (21.7645, 72.1519), 'BVC': (21.7645, 72.1519),
-            'JAMNAGAR': (22.4707, 70.0577), 'JAM': (22.4707, 70.0577),
-            'DWARKA': (22.2394, 68.9678), 'DWK': (22.2394, 68.9678),
-            
-            # Rajasthan
-            'JAIPUR': (26.9124, 75.7873), 'JP': (26.9124, 75.7873),
-            'JODHPUR': (26.2389, 73.0243), 'JU': (26.2389, 73.0243),
-            'UDAIPUR CITY': (24.5854, 73.7125), 'UDZ': (24.5854, 73.7125),
-            'AJMER': (26.4499, 74.6399), 'AII': (26.4499, 74.6399),
-            'BIKANER': (28.0229, 73.3119), 'BKN': (28.0229, 73.3119),
-            'KOTA': (25.2138, 75.8648), 'KOTA': (25.2138, 75.8648),
-            
-            # Uttar Pradesh
-            'LUCKNOW': (26.8467, 80.9462), 'LKO': (26.8467, 80.9462),
-            'KANPUR CENTRAL': (26.4499, 80.3319), 'CNB': (26.4499, 80.3319),
-            'VARANASI': (25.3176, 82.9739), 'BSB': (25.3176, 82.9739),
-            'ALLAHABAD': (25.4358, 81.8463), 'ALD': (25.4358, 81.8463),
-            'AGRA CANTT': (27.1767, 78.0081), 'AGC': (27.1767, 78.0081),
-            'MATHURA': (27.4924, 77.6737), 'MTJ': (27.4924, 77.6737),
-            'GHAZIPUR CITY': (25.5881, 83.5775), 'GCT': (25.5881, 83.5775),
-            'GORAKHPUR': (26.7606, 83.3732), 'GKP': (26.7606, 83.3732),
-            
-            # Bihar
-            'PATNA': (25.5941, 85.1376), 'PNBE': (25.5941, 85.1376),
-            'GAYA': (24.7914, 85.0002), 'GAYA': (24.7914, 85.0002),
-            'MUZAFFARPUR': (26.1197, 85.3910), 'MFP': (26.1197, 85.3910),
-            'DARBHANGA': (26.1542, 85.8918), 'DBG': (26.1542, 85.8918),
-            'BHAGALPUR': (25.2425, 86.9842), 'BGP': (25.2425, 86.9842),
-            
-            # West Bengal
-            'SEALDAH': (22.5675, 88.3418), 'SDAH': (22.5675, 88.3418),
-            'KHARAGPUR': (22.3460, 87.3200), 'KGP': (22.3460, 87.3200),
-            'DURGAPUR': (23.4803, 87.3119), 'DGR': (23.4803, 87.3119),
-            'ASANSOL': (23.6739, 86.9524), 'ASN': (23.6739, 86.9524),
-            'SILIGURI': (26.7271, 88.3953), 'SGUJ': (26.7271, 88.3953),
-            'NEW JALPAIGURI': (26.7271, 88.3953), 'NJP': (26.7271, 88.3953),
-            
-            # Madhya Pradesh
-            'BHOPAL': (23.2599, 77.4126), 'BPL': (23.2599, 77.4126),
-            'INDORE': (22.7196, 75.8577), 'INDB': (22.7196, 75.8577),
-            'JABALPUR': (23.1685, 79.9338), 'JBP': (23.1685, 79.9338),
-            'UJJAIN': (23.1765, 75.7885), 'UJN': (23.1765, 75.7885),
-            'GWALIOR': (26.2183, 78.1828), 'GWL': (26.2183, 78.1828),
-            'RATLAM': (23.3315, 75.0367), 'RTM': (23.3315, 75.0367),
-            
-            # Chhattisgarh
-            'RAIPUR': (21.2514, 81.6296), 'R': (21.2514, 81.6296),
-            'BILASPUR': (22.0797, 82.1391), 'BSP': (22.0797, 82.1391),
-            'DURG': (21.1901, 81.2849), 'DURG': (21.1901, 81.2849),
-            
-            # Odisha
-            'BHUBANESWAR': (20.2961, 85.8245), 'BBS': (20.2961, 85.8245),
-            'CUTTACK': (20.4625, 85.8828), 'CTC': (20.4625, 85.8828),
-            'PURI': (19.8135, 85.8312), 'PURI': (19.8135, 85.8312),
-            'BERHAMPUR': (19.2823, 84.7941), 'BAM': (19.2823, 84.7941),
-            
-            # Andhra Pradesh & Telangana
-            'VIJAYAWADA': (16.5062, 80.6480), 'BZA': (16.5062, 80.6480),
-            'VISAKHAPATNAM': (17.7231, 83.3012), 'VSKP': (17.7231, 83.3012),
-            'TIRUPATI': (13.6288, 79.4192), 'TPTY': (13.6288, 79.4192),
-            'GUNTUR': (16.3067, 80.4365), 'GNT': (16.3067, 80.4365),
-            'NELLORE': (14.4426, 79.9865), 'NLR': (14.4426, 79.9865),
-            'RAJAHMUNDRY': (17.0005, 81.8040), 'RJY': (17.0005, 81.8040),
-            'WARANGAL': (17.9689, 79.5941), 'WL': (17.9689, 79.5941),
-            
-            # Tamil Nadu
-            'CHENNAI EGMORE': (13.0780, 80.2619), 'MS': (13.0780, 80.2619),
-            'COIMBATORE': (11.0168, 76.9558), 'CBE': (11.0168, 76.9558),
-            'MADURAI': (9.9252, 78.1198), 'MDU': (9.9252, 78.1198),
-            'SALEM': (11.6643, 78.1460), 'SA': (11.6643, 78.1460),
-            'TIRUCHIRAPALLI': (10.7905, 78.7047), 'TPJ': (10.7905, 78.7047),
-            'TIRUNELVELI': (8.7139, 77.7567), 'TEN': (8.7139, 77.7567),
-            'ERODE': (11.3410, 77.7172), 'ED': (11.3410, 77.7172),
-            'VELLORE': (12.9165, 79.1325), 'VLR': (12.9165, 79.1325),
-            
-            # Kerala
-            'ERNAKULAM': (9.9312, 76.2673), 'ERS': (9.9312, 76.2673), 'KOCHI': (9.9312, 76.2673),
-            'TRIVANDRUM CENTRAL': (8.5241, 76.9366), 'TVC': (8.5241, 76.9366),
-            'THRISSUR': (10.5276, 76.2144), 'TCR': (10.5276, 76.2144),
-            'KOZHIKODE': (11.2588, 75.7804), 'CLT': (11.2588, 75.7804),
-            'KANNUR': (11.8745, 75.3704), 'CAN': (11.8745, 75.3704),
-            'KOTTAYAM': (9.5916, 76.5222), 'KTYM': (9.5916, 76.5222),
-            'PALAKKAD': (10.7867, 76.6548), 'PGT': (10.7867, 76.6548),
-            
-            # Karnataka
-            'YESVANTPUR': (13.022, 77.5264), 'YPR': (13.0222, 77.5264),
-            'MYSORE': (12.3076, 76.6947), 'MYS': (12.3076, 76.6947),
-            'HUBLI': (15.3647, 75.1240), 'UBL': (15.3647, 75.1240),
-            'MANGALORE CENTRAL': (12.8406, 74.8984), 'MAQ': (12.8406, 74.8984),
-            'BELGAUM': (15.8497, 74.4977), 'BGM': (15.8497, 74.4977),
-            'GULBARGA': (17.3297, 76.8343), 'GR': (17.3297, 76.8343),
-            'DAVANGERE': (14.4644, 75.9218), 'DVG': (14.4644, 75.9218),
-            
-            # Goa
-            'MADGAON': (15.2993, 74.1240), 'MAO': (15.2993, 74.1240), 'GOA': (15.2993, 74.1240),
-            'VASCO DA GAMA': (15.3959, 73.8203), 'VSG': (15.3959, 73.8203),
-            
-            # Punjab & Haryana
-            'AMRITSAR': (31.6340, 74.8723), 'ASR': (31.6340, 74.8723),
-            'LUDHIANA': (30.9010, 75.8573), 'LDH': (30.9010, 75.8573),
-            'JALANDHAR': (31.3260, 75.5762), 'JRC': (31.3260, 75.5762),
-            'CHANDIGARH': (30.7333, 76.7794), 'CDG': (30.7333, 76.7794),
-            'AMBALA': (30.3782, 76.7767), 'UMB': (30.3782, 76.7767),
-            'KURUKSHETRA': (29.9693, 76.8789), 'KKDE': (29.9693, 76.8789),
-            
-            # Himachal Pradesh & Uttarakhand
-            'KALKA': (30.8398, 76.9735), 'KLK': (30.8398, 76.9735),
-            'HARIDWAR': (29.9457, 78.1642), 'HW': (29.9457, 78.1642),
-            'DEHRADUN': (30.3165, 78.0322), 'DDN': (30.3165, 78.0322),
-            
-            # Jharkhand
-            'RANCHI': (23.3441, 85.3096), 'RNC': (23.3441, 85.3096),
-            'DHANBAD': (23.7957, 86.4304), 'DHN': (23.7957, 86.4304),
-            'JAMSHEDPUR': (22.8046, 86.2029), 'TATA': (22.8046, 86.2029),
-            
-            # Northeast States
-            'GUWAHATI': (26.1445, 91.7362), 'GHY': (26.1445, 91.7362),
-            'DIBRUGARH': (27.4728, 94.9120), 'DBRG': (27.4728, 94.9120),
-            'JORHAT': (26.7509, 94.2037), 'JTTN': (26.7509, 94.2037),
-            'TINSUKIA': (27.4900, 95.3600), 'NTSK': (27.4900, 95.3600),
-            
-            # Jammu & Kashmir
-            'JAMMU TAWI': (32.7266, 74.8570), 'JAT': (32.7266, 74.8570),
-            'UDHAMPUR': (32.9150, 75.1420), 'UHP': (32.9150, 75.1420)
-        }
-        
-        source_coords = coordinates.get(source.upper())
-        dest_coords = coordinates.get(destination.upper())
-        
-        if source_coords and dest_coords:
-            distance = self.haversine_distance(source_coords, dest_coords)
-            # Rail distance is typically 30% longer than air distance
-            rail_distance = int(distance * 1.3)
-            
-            # Cache the result
-            self.cache_distance(source, destination, rail_distance, 'Estimated (Coordinates)')
-            
-            return rail_distance, 'Estimated (Coordinates)'
-        
-        return 0, 'No coordinates available'
-    
-    def haversine_distance(self, coord1, coord2):
-        """Calculate distance between two coordinates using haversine formula"""
-        import math
-        
-        lat1, lon1 = coord1
-        lat2, lon2 = coord2
-        
-        # Earth's radius in kilometers
-        R = 6371
-        
-        # Convert coordinates to radians
-        lat1, lon1, lat2, lon2 = map(math.radians, [lat1, lon1, lat2, lon2])
-        dlat = lat2 - lat1
-        dlon = lon2 - lon1
-        
-        # Haversine formula
-        a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
-        c = 2 * math.asin(math.sqrt(a))
-        
-        return R * c
+            return 0, f'Google API exception: {str(e)}'
+
     
     def cache_distance(self, source, destination, distance, method):
         """Cache distance result in database"""
@@ -520,7 +631,7 @@ class CompleteAPIRailwayCalculator:
         # Single station or unrecognized format
         return [self.find_station_by_name(text)]
     
-    def calculate_distance(self, source, destination, api_method='google'):
+    def calculate_distance(self, source, destination):
         """Calculate distance between two stations"""
         if not source or not destination:
             return 0, 'No stations provided'
@@ -529,12 +640,12 @@ class CompleteAPIRailwayCalculator:
         source = self.find_station_by_name(source)
         destination = self.find_station_by_name(destination)
         
-        # Get distance via API
-        distance, method = self.get_distance_via_api(source, destination, api_method)
+        # Get distance via Google API
+        distance, method = self.get_distance_via_api(source, destination)
         
         return distance or 0, method
     
-    def calculate_journey_distance(self, segments, api_method='google'):
+    def calculate_journey_distance(self, segments):
         """Calculate total distance for multi-segment journey"""
         if not segments or len(segments) < 2:
             return 0, 'Insufficient segments for journey'
@@ -549,7 +660,7 @@ class CompleteAPIRailwayCalculator:
             destination = segments[i + 1]
             
             if source and destination:
-                distance, method = self.calculate_distance(source, destination, api_method)
+                distance, method = self.calculate_distance(source, destination)
                 total_distance += distance
                 methods_used.append(method)
                 journey_details.append(f"{source} to {destination}: {distance} km")
@@ -563,17 +674,30 @@ class CompleteAPIRailwayCalculator:
         
         return total_distance, primary_method, journey_details
     
-    def process_file_separate_columns(self, df, from_col, to_col, date_col=None, api_method='google'):
+    def process_file_separate_columns(self, df, from_col, to_col, date_col=None):
         """Process dataframe with separate From and To columns"""
         results = []
         
         progress = st.progress(0)
         status = st.empty()
+        cancel_placeholder = st.empty()
         total = len(df)
         
         for i, row in df.iterrows():
+            # Check for cancellation
+            if st.session_state.get('processing_cancelled', False):
+                status.warning(f"⚠️ Processing cancelled at row {i+1}/{total}")
+                break
+                
             progress.progress((i + 1) / total)
             status.text(f"Processing {i+1}/{total} - API calls: {self.api_calls_made}")
+            
+            # Show cancel button
+            with cancel_placeholder.container():
+                if st.button("❌ Cancel Processing", key=f"cancel_sep_{i}", type="secondary"):
+                    st.session_state.processing_cancelled = True
+                    st.warning("⏹️ Processing cancellation requested...")
+                    break
             
             # Get source and destination from separate columns
             source_text = str(row[from_col]).strip() if pd.notna(row[from_col]) else ''
@@ -583,8 +707,8 @@ class CompleteAPIRailwayCalculator:
             source = self.find_station_by_name(source_text)
             destination = self.find_station_by_name(destination_text)
             
-            # Calculate distance
-            distance, method = self.calculate_distance(source, destination, api_method)
+            # Calculate distance using Google API
+            distance, method = self.calculate_distance(source, destination)
             
             result = {
                 'Original_From': source_text,
@@ -606,26 +730,40 @@ class CompleteAPIRailwayCalculator:
         
         progress.empty()
         status.empty()
+        cancel_placeholder.empty()
         return pd.DataFrame(results)
 
-    def process_file_single_route(self, df, route_col, date_col=None, api_method='google'):
+    def process_file_single_route(self, df, route_col, date_col=None):
         """Process dataframe with single route column supporting multi-segment journeys"""
         results = []
         
         progress = st.progress(0)
         status = st.empty()
+        cancel_placeholder = st.empty()
         total = len(df)
         
         for i, row in df.iterrows():
+            # Check for cancellation
+            if st.session_state.get('processing_cancelled', False):
+                status.warning(f"⚠️ Processing cancelled at row {i+1}/{total}")
+                break
+                
             progress.progress((i + 1) / total)
             status.text(f"Processing {i+1}/{total} - API calls: {self.api_calls_made}")
+            
+            # Show cancel button
+            with cancel_placeholder.container():
+                if st.button("❌ Cancel Processing", key=f"cancel_single_{i}", type="secondary"):
+                    st.session_state.processing_cancelled = True
+                    st.warning("⏹️ Processing cancellation requested...")
+                    break
             
             route_text = row[route_col]
             segments = self.parse_route(route_text)
             
             if len(segments) >= 2:
                 # Multi-segment journey
-                total_distance, method, journey_details = self.calculate_journey_distance(segments, api_method)
+                total_distance, method, journey_details = self.calculate_journey_distance(segments)
                 
                 result = {
                     'Source & Destination': route_text,
@@ -664,6 +802,7 @@ class CompleteAPIRailwayCalculator:
         
         progress.empty()
         status.empty()
+        cancel_placeholder.empty()
         return pd.DataFrame(results)
 
 def main():
@@ -672,52 +811,39 @@ def main():
     
     calculator = CompleteAPIRailwayCalculator()
     
-    # API Configuration Sidebar
+    # API Status Sidebar
     with st.sidebar:
-        st.header("🔧 API Configuration")
+        st.header("🔧 API Status")
         
-        st.subheader("Google Maps API")
-        google_api_key = st.text_input(
-            "Google Maps API Key", 
-            type="password",
-            help="For accurate distance calculations"
-        )
-        if google_api_key:
-            st.session_state['google_api_key'] = google_api_key
+        st.success("✅ Google Maps API: Configured")
+        st.info("🔑 Using hardcoded Google API key")
+        st.info("🚂 Distance calculation: Google Maps only")
+        st.info(f"📊 API calls made: {calculator.api_calls_made}")
         
-        st.subheader("RapidAPI")
+        st.subheader("RapidAPI (Optional)")
         rapidapi_key = st.text_input(
             "RapidAPI Key", 
             type="password",
-            help="For comprehensive station code lookups"
+            help="Optional: For enhanced station code lookups"
         )
         if rapidapi_key:
             st.session_state['rapidapi_key'] = rapidapi_key
+            st.success("✅ RapidAPI: Connected")
+        else:
+            st.warning("⚠️ RapidAPI: Not configured (station search limited)")
         
-        st.subheader("Settings")
-        api_method = st.selectbox(
-            "Distance Calculation Method",
-            ['google', 'coordinates'],
-            help="Choose your preferred method for distance calculation"
-        )
-        
-        st.info(f"API calls made: {calculator.api_calls_made}")
-        
-        # API Setup Guide
-        with st.expander("📋 API Setup Guide"):
+        # API Info
+        with st.expander("ℹ️ API Information"):
             st.markdown("""
-            **Google Maps API (Free Tier: 40,000 requests/month):**
-            1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-            2. Create/select a project
-            3. Enable "Distance Matrix API"
-            4. Create API key in Credentials
-            5. Copy and paste above
+            **Google Maps API:**
+            - ✅ Pre-configured with hardcoded key
+            - 🎯 Always used for distance calculations
+            - 🚫 No coordinate-based fallback
             
-            **RapidAPI (Free plans available):**
-            1. Go to [RapidAPI](https://rapidapi.com/)
-            2. Search for "Indian Railways"
-            3. Subscribe to free plan
-            4. Copy API key
+            **RapidAPI (Optional):**
+            - 🔍 Enhanced station code search
+            - 📋 Get your key from [RapidAPI](https://rapidapi.com/)
+            - 🆓 Free plans available
             """)
     
     # Main Content Tabs
@@ -767,50 +893,58 @@ def main():
                                            help="Column with journey segments separated by '-' (e.g., 'PN-JP-PN' for Pune to Jodhpur to Pune)")
                 
                 if st.button("🚀 Process with API", type="primary"):
-                    with st.spinner("Processing with APIs..."):
+                    # Initialize processing cancellation state
+                    st.session_state.processing_cancelled = False
+                    
+                    with st.spinner("Processing with Google Maps API..."):
                         if use_single_route:
-                            results_df = calculator.process_file_single_route(df, route_col, date_col, api_method)
+                            results_df = calculator.process_file_single_route(df, route_col, date_col)
                         else:
-                            results_df = calculator.process_file_separate_columns(df, from_col, to_col, date_col, api_method)
+                            results_df = calculator.process_file_separate_columns(df, from_col, to_col, date_col)
+                        
+                        # Check if processing was cancelled
+                        if st.session_state.get('processing_cancelled', False):
+                            st.warning("⚠️ Processing was cancelled! Showing partial results.")
+                            st.info(f"📊 Processed {len(results_df)} out of {len(df)} total rows")
+                        else:
+                            st.success("✅ Processing complete!")
+                        
+                        # Display results
+                        st.subheader("📊 Results")
+                        st.dataframe(results_df)
                     
-                    st.success("✅ Processing complete!")
-                    
-                    # Display results
-                    st.subheader("📊 Results")
-                    st.dataframe(results_df)
-                    
-                    # Download button
-                    csv = results_df.to_csv(index=False)
-                    st.download_button(
-                        "📥 Download Results",
-                        csv,
-                        "railway_distances_api.csv",
-                        "text/csv"
-                    )
-                    
-                    # Statistics
-                    # Handle both old and new column formats
-                    distance_col = 'Total_Distance' if 'Total_Distance' in results_df.columns else 'Distance_Travelled'
-                    
-                    # Row counting metrics
-                    total_rows = len(results_df)
-                    distance_found_rows = len(results_df[results_df[distance_col] > 0])
-                    success_rate = (distance_found_rows / total_rows * 100) if total_rows > 0 else 0
-                    unique_methods = results_df['Method'].value_counts()
-                    
-                    st.subheader("📈 Statistics")
-                    col_a, col_b, col_c = st.columns(3)
-                    with col_a:
-                        st.metric("Total Rows Processed", f"{total_rows:,}")
-                    with col_b:
-                        st.metric("Distance Found", f"{distance_found_rows:,}")
-                    with col_c:
-                        st.metric("Success Rate", f"{success_rate:.1f}%")
-                    
-                    # Method breakdown chart
-                    if len(unique_methods) > 1:
-                        st.subheader("🔍 Method Breakdown")
-                        st.bar_chart(unique_methods)
+                        # Download button
+                        csv = results_df.to_csv(index=False)
+                        st.download_button(
+                            "📥 Download Results",
+                            csv,
+                            "railway_distances_api.csv",
+                            "text/csv"
+                        )
+                        
+                        # Statistics
+                        # Handle both old and new column formats
+                        distance_col = 'Total_Distance' if 'Total_Distance' in results_df.columns else 'Distance_Travelled'
+                        
+                        # Row counting metrics
+                        total_rows = len(results_df)
+                        distance_found_rows = len(results_df[results_df[distance_col] > 0])
+                        success_rate = (distance_found_rows / total_rows * 100) if total_rows > 0 else 0
+                        unique_methods = results_df['Method'].value_counts()
+                        
+                        st.subheader("📈 Statistics")
+                        col_a, col_b, col_c = st.columns(3)
+                        with col_a:
+                            st.metric("Total Rows Processed", f"{total_rows:,}")
+                        with col_b:
+                            st.metric("Distance Found", f"{distance_found_rows:,}")
+                        with col_c:
+                            st.metric("Success Rate", f"{success_rate:.1f}%")
+                        
+                        # Method breakdown chart
+                        if len(unique_methods) > 1:
+                            st.subheader("🔍 Method Breakdown")
+                            st.bar_chart(unique_methods)
                         
             except Exception as e:
                 st.error(f"❌ Error processing file: {str(e)}")
@@ -863,8 +997,8 @@ def main():
             
             if st.button("🧮 Calculate Distance", type="primary"):
                 if source and destination:
-                    with st.spinner("Calculating distance..."):
-                        distance, method = calculator.calculate_distance(source, destination, api_method)
+                    with st.spinner("Calculating distance with Google Maps API..."):
+                        distance, method = calculator.calculate_distance(source, destination)
                     
                     if distance:
                         st.success(f"✅ **Distance:** {distance} km")
@@ -893,11 +1027,11 @@ def main():
             
             if st.button("🧮 Calculate Journey Distance", type="primary"):
                 if journey_input:
-                    with st.spinner("Calculating journey distance..."):
+                    with st.spinner("Calculating journey distance with Google Maps API..."):
                         segments = calculator.parse_route(journey_input)
                         
                         if len(segments) >= 2:
-                            total_distance, method, journey_details = calculator.calculate_journey_distance(segments, api_method)
+                            total_distance, method, journey_details = calculator.calculate_journey_distance(segments)
                             
                             if total_distance:
                                 st.success(f"✅ **Total Journey Distance:** {total_distance} km")
