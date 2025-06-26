@@ -1,0 +1,8 @@
+{
+  "build": {
+    "builder": "NIXPACKS"
+  },
+  "deploy": {
+    "startCommand": "streamlit run complete_api_railway_calculator.py --server.port $PORT --server.address 0.0.0.0 --server.headless true"
+  }
+} 
